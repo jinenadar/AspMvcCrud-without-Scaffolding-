@@ -1,0 +1,79 @@
+﻿@model PagedList.IPagedList<AspMvcCrud.Models.product>
+@using PagedList.Mvc;
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@*Html.BeginForm run the HOME controller InvoiceList Action's GET method when form get submitted.*@
+@using (Html.BeginForm("Index", "Product", FormMethod.Get, new { id = "form1" }))
+
+{
+    <div id='Paging' style="text-align: center">
+        @*Dorpdownlist generation code*@
+        Page Size: @Html.DropDownList("pageSize")
+
+        <br />(Nos. of Records To Display)
+        <br />
+        <br />
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+        of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = ViewBag.psize }))
+    </div>
+}
+<table class="table">
+    <tr>
+        <th>
+            Product Id
+        </th>
+        <th>
+            Product Name
+        </th>
+        <th>
+            Category Id
+        </th>
+        <th>
+            Category Name
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.productname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.categoryid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.category.categoryname)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
+</table>
+<script type="text/javascript">
+
+    $(function () {
+        $("#pageSize").change(function () {
+            alert("abc");
+            $("#form1").submit();
+        });
+    });
+</script>
